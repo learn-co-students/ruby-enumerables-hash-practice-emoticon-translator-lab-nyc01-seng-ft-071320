@@ -3,16 +3,16 @@ require "yaml"
 
 def load_library(file_path)
  emoticons = YAML.load_file(file_path)
-
-  new_hash = {
-   'key1' => {},
-   'key2' => {}
- }
-
-  emoticons.each do |key,value|
-   new_hash['key1'][value[0]] = emoticons[key][1]
-   new_hash['key2'][value[1]] = key
- end
+ #binding.pry
+new_hash={ }
+emoticons.each do |key, value| #key is the hash (names) and value is the array(japanes and english)
+   new_hash[key]={ }
+   new_hash[key][:english]=value[0]
+  new_hash[key][:japanese]=value[1]
+  
+  #new_hash[key][:english]=value[0]
+   
+end 
 
   new_hash
 end
@@ -20,22 +20,37 @@ end
 
 
 def get_japanese_emoticon(file_path, emoticon)
- result = load_library(file_path)['key1'][emoticon]
- #binding.pry
- if result
-    result
- else
-  "Sorry, that emoticon was not found"
+ # ressources=load_library(file_path)
+  translation=""
+  ressources=load_library(file_path)
+  ressources.each do|key,value|
+  if value[:english] == emoticon
+   translation=value[:japanese]
  end
-end
-
-def get_english_meaning(path, emoticon)
- result = load_library(path)['key1'][emoticon]
- if result
-    result
- else
-   "Sorry, that emoticon was not found"
  end
- #binding.pry
-end
+ if translation==""
+   return "Sorry, that emoticon was not found"
+ else 
+   return translation
+ end
+ end 
+ 
+def get_english_meaning(file_path, japanese_emoticon)
+  translation= ""
+  #binding.pry
+  ressources=load_library(file_path)
+  ressources.each do|key,value|
+  if value[:japanese] == japanese_emoticon
+   translation=value[:english]
+   translation=key
+  # binding.pry
+ end
+ end
+ if translation==""
+   return "Sorry, that emoticon was not found"
+ else 
+   return translation
+ end
+ end 
+ filter_parameter_logging
  
